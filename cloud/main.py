@@ -15,7 +15,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("idontknow")
 
 def on_message(client, userdata, msg):
-    cursor
+    print("MySQL update goes here")
 
 def startClient(url):
     client = mqtt.Client()
@@ -31,11 +31,12 @@ def connectDB():
     try:
         conn = mariadb.connect(
             user="appuser",
-            password="supersecurepassword"
-            host="localhost"
-            port="3306"
+            password="supersecurepassword",
+            host="localhost",
+            port="3306",
             database="appdb"
         )
+
     except mariadb.Error as e:
         print(f"Error connecting to DB: {e}")
         sys.exit(1)
