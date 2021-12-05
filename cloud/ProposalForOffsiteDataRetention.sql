@@ -1,3 +1,4 @@
+CREATE DATABASE `appdb`;
 CREATE TABLE `activations` (`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT,`profileid` SMALLINT,`starttime` TIME,`actuatorid` SMALLINT);
 CREATE TABLE `actuators` (`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT,`name` VARCHAR,`roomid` SMALLINT,`state` boolean,`color` MEDIUMINT,`intensity` SMALLINT);
 CREATE TABLE `profiles` (`id` SMALLINT PRIMARY KEY NOT NULL AUTO_INCREMENT, `userid` SMALLINT, `dayofweek` VARCHAR,`lastmodified` TIMESTAMP NOT NULL);
