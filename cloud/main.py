@@ -30,7 +30,7 @@ def startClient(url):
 def connectDB():
     try:
         conn = mariadb.connect(
-            user="appuser",
+            user="app",
             password="supersecurepassword",
             host="localhost",
             port="3306",
