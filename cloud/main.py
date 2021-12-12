@@ -11,23 +11,7 @@ import paho.mqtt.client as mqtt
 import mariadb
 import sys
 
-def on_connect(client, userdata, flags, rc):
-    client.subscribe("idontknow")
-
-def on_message(client, userdata, msg):
-    print("MySQL update goes here")
-
-def startClient(url):
-    client = mqtt.Client()
-    client.on_connect = on_connect
-    client.on_message = on_message
-    try:
-        client.connect(url, 1883, 60)
-    except mqtt.MQTT_ERR_CONN_REFUSED as e:
-        print(f"MQTT connection refused: {e}")
-        sys.exit(1)
-
-def connectDB():
+def writeDB(query):
     try:
         conn = mariadb.connect(
             user="app",
@@ -41,13 +25,32 @@ def connectDB():
         print(f"Error connecting to DB: {e}")
         sys.exit(1)
     cur = conn.cursor()
-    cur.execute(
-        "ENTER QUERY HERE"
-    )
-    
-    
+    try:
+        cur.execute(
+            query
+            )
+    except mariadb.Error as e:
+        print(f"Error: {e}")
+    conn.commit()
+    print("Ran "+query)
+    conn.close()
+
+def on_connect(client, userdata, flags, rc):
+    client.subscribe("building/+/room/+/light/+/profile/+/timezone/+/lightstatus/+",0)
+
+def on_message(client, userdata, msg):
+    actuatorid = ""
+    query = ""
+    decoded = str(msg.payload.decode("utf-8"))
+    query = "UPDATE appdb.actuators SET state = " + decoded + "WHERE id = " + actuatorid + ";"
+    writeDB(query)
+
 def main():
-    startClient("joes.mqtt.broker")
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect("test.mosquitto.org", 1883, 60)
+    client.loop_forever()
 
 if __name__ == "__main__":
     main()
