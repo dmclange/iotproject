@@ -9,7 +9,7 @@ __license__ = "MIT"
 
 import paho.mqtt.client as mqtt
 import mariadb
-import sys
+import sys, queue, re
 
 def writeDB(query):
     try:
@@ -36,13 +36,20 @@ def writeDB(query):
     conn.close()
 
 def on_connect(client, userdata, flags, rc):
-    client.subscribe("building/+/room/+/light/+/profile/+/timezone/+/lightstatus/+",0)
+    client.subscribe([("actuators/+/color",0), ("actuators/+/intensity",0), ("actuators/+/state",0), ("sensors/+/lightlevel",0), ("sensors/+/temp",0)])
 
 def on_message(client, userdata, msg):
-    actuatorid = ""
-    query = ""
-    decoded = str(msg.payload.decode("utf-8"))
-    query = "UPDATE appdb.actuators SET state = " + decoded + "WHERE id = " + actuatorid + ";"
+    q = queue.Queue()
+    q.put((msg.topic,msg.payload))
+    current = q.get()
+    payload = current[1]
+    id = re.search("/\d/",current[0])
+    id.replace('/','')
+    kvp = current[0].split("/")
+    table = kvp[0]
+    value = kvp[2]
+    decoded = payload.decode('utf8')
+    query = 'UPDATE '+ table +' SET '+ value +' = ' + decoded + 'WHERE id = ' + id + ';'
     writeDB(query)
 
 def main():
@@ -51,6 +58,7 @@ def main():
     client.on_message = on_message
     client.connect("test.mosquitto.org", 1883, 60)
     client.loop_forever()
+
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,5 @@
 CREATE DATABASE `appdb` CHARACTER SET utf8 COLLATE utf8_swedish_ci;
+
 CREATE TABLE `activations` (`id` SMALLINT unsigned NOT NULL AUTO_INCREMENT,`profileid` SMALLINT unsigned,`starttime` TIME,`actuatorid` SMALLINT unsigned, PRIMARY KEY (id));
 CREATE TABLE `actuators` (`id` SMALLINT unsigned NOT NULL AUTO_INCREMENT,`name` VARCHAR(30),`roomid` SMALLINT unsigned,`state` BOOLEAN NOT NULL DEFAULT 0,`color` MEDIUMINT NOT NULL,`intensity` SMALLINT, PRIMARY KEY (id));
 CREATE TABLE `profiles` (`id` SMALLINT unsigned NOT NULL AUTO_INCREMENT, `userid` SMALLINT unsigned, `dayofweek` VARCHAR(3),`lastmodified` TIMESTAMP, PRIMARY KEY (id));
