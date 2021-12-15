@@ -17,7 +17,7 @@ def writeDB(query):
             user="app",
             password="supersecurepassword",
             host="localhost",
-            port="3306",
+            port=3306,
             database="appdb"
         )
 
@@ -43,13 +43,14 @@ def on_message(client, userdata, msg):
     q.put((msg.topic,msg.payload))
     current = q.get()
     payload = current[1]
-    id = re.search("/\d/",current[0])
-    id.replace('/','')
+    id = re.findall(r"/\d/",current[0])
+    id = id[0].replace('/','')
     kvp = current[0].split("/")
     table = kvp[0]
     value = kvp[2]
     decoded = payload.decode('utf8')
-    query = 'UPDATE '+ table +' SET '+ value +' = ' + decoded + 'WHERE id = ' + id + ';'
+    print("Testing printing")
+    query = 'UPDATE '+ table +' SET '+ value +' = ' + decoded + ' WHERE id = ' + id + ';'
     writeDB(query)
 
 def main():
