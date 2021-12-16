@@ -8,7 +8,7 @@
 #define NUM_LEDS 33
 #define BRIGHTNESS 255
 
-#define I2C_ADDRESS 2
+#define I2C_ADDRESS 1
 
 #define TIMEOUT 5000
 
@@ -33,27 +33,38 @@ void setup() {
   } 
 }
 
+int brightness;
+int profile;
+
 void loop() {
   if (millis()-time>TIMEOUT) {
     set_light(0);
   }
   
-  delay(100);
+  switch(profile) {
+  case 1:
+    colors();
+    break;
+  case 2:
+    set_light(brightness);
+    break;
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
 
 void control_leds(int howMany) {
+  
   time = millis();
 
   int value = Wire.read();
 
   if (value == 101) {
-    colors();
+    profile = 1;
   }
   else
-    int value = (value/100)*255;
-    set_light(value);
+    profile = 2;
+    brightness = (value/100)*255;
 }
 
 //SET LIGHT
@@ -69,7 +80,6 @@ void set_light(int brightness) {
 
 //COLORS
 void colors() {
-  
   for (int j = 0; j < NUM_LEDS; j++) {
     for (int i = 0; i < NUM_LEDS; i++) {
 
@@ -86,6 +96,6 @@ void colors() {
 
     }
     FastLED.show();
-    delay(100);
+    delay(50);
   }
 }
