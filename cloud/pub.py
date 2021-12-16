@@ -39,7 +39,7 @@ def publishActuator(iid):
             user="app",
             password="supersecurepassword",
             host="localhost",
-            port="3306",
+            port=3306,
             database="appdb"
         )
 
