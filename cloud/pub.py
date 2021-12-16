@@ -24,7 +24,7 @@ def on_message(client, userdata, msg):
     publishActuator(client,id)
 
 
-def publishActuator(client, iid):
+def publishActuator(client, aid):
     try:
         conn = mariadb.connect(
             user="app",
@@ -39,14 +39,15 @@ def publishActuator(client, iid):
         sys.exit(1)
     cur = conn.cursor()
     cur.execute(
-            "SELECT id,state,color,intensity FROM actuators WHERE id=" + iid + ";"
+            "SELECT id,state,color,intensity FROM actuators WHERE id=" + aid + ";"
             )
     for (id,state,color,intensity) in cur:
-        pubtop = "actuators/"+id+"/state"
+        strid = str(id)
+        pubtop = "actuators/"+strid+"/state"
         client.publish(topic=pubtop,payload=state)
-        pubtop = "actuators/"+id+"/color"
+        pubtop = "actuators/"+strid+"/color"
         client.publish(topic=pubtop,payload=color)
-        pubtop = "actuators/"+id+"/intensity"
+        pubtop = "actuators/"+strid+"/intensity"
         client.publish(topic=pubtop,payload=intensity)
     conn.close()
 
