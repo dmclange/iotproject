@@ -1,19 +1,25 @@
 #include "sensor.cpp"
 #include "light.cpp"
 #include "blinds.cpp"
+#include "mqtt.cpp"
 
 Sensor sensor;
 Light light;
 Blinds blinds;
+MQTT mqtt;
 
 void setup() {
   Serial.begin(9600);
   sensor.connect();
   light.connect();
   blinds.connect();
+  mqtt.connect();
+  mqtt.onMessage(onMqttMessage);
 }
 
 void loop() {
+
+  mqtt.poll();
 
   int value = sensor.read();
 
@@ -34,4 +40,19 @@ void loop() {
   }
 
   delay(100);
+}
+
+void onMqttMessage(int messageSize) {
+  Serial.println("Received a message with topic '");
+  Serial.print(mqtt.messageTopic());
+  Serial.print("', length ");
+  Serial.print(messageSize);
+  Serial.println(" bytes:");
+
+  while (mqtt.available()) {
+    Serial.print((char)mqtt.read());
+  }
+  
+  Serial.println();
+  Serial.println();
 }
