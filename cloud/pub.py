@@ -66,7 +66,7 @@ def publishActuator(iid):
 
 def main():
     global client
-    client.connect("192.168.141.247", 1883, 60)
+    client.connect("localhost", 1883, 60)
     client.on_connect = on_connect
     client.on_message = on_message
     client.loop_forever() 
