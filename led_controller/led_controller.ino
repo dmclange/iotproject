@@ -8,7 +8,7 @@
 #define NUM_LEDS 33
 #define BRIGHTNESS 255
 
-#define I2C_ADDRESS 4
+#define I2C_ADDRESS 2
 
 #define TIMEOUT 5000
 
@@ -52,7 +52,8 @@ void control_leds(int howMany) {
     colors();
   }
   else
-    set_light((value/100)*255);
+    int value = (value/100)*255;
+    set_light(value);
 }
 
 //SET LIGHT
