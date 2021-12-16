@@ -38,8 +38,6 @@ void loop() {
     light.set(1, 0);
     light.set(2, 0);
   }
-
-  delay(100);
 }
 
 void onMqttMessage(int messageSize) {

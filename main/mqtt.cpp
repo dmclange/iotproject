@@ -14,7 +14,7 @@ class MQTT: public MqttClient {
       const char topic1[] = "building/floorone";
       const char topic2[] = "building/floortwo";
       
-      WiFi.begin("AirPort Extreme Wi-Fi", "Pass4dom");
+      WiFi.begin("SSID", "PASSWORD");
 
       Serial.println();
       Serial.println("Connecting...");
@@ -48,5 +48,4 @@ class MQTT: public MqttClient {
       Serial.print("Topic: ");
       Serial.println(topic2); 
     }
-
 };
