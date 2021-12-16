@@ -4,7 +4,7 @@ class Blinds: public Servo {
   public:
 
     void connect() {
-      attach(0);
+      attach(0);  // connect to pin3
     }
 
     void close(int value) {

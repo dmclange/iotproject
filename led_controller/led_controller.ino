@@ -5,10 +5,10 @@
 #include <Wire.h>
 
 #define PIN 9
-#define NUM_LEDS 33
+#define NUM_LEDS 32
 #define BRIGHTNESS 255
 
-#define I2C_ADDRESS 1
+#define I2C_ADDRESS 2
 
 #define TIMEOUT 5000
 
@@ -33,8 +33,8 @@ void setup() {
   } 
 }
 
-int brightness;
 int profile;
+int brightness;
 
 void loop() {
   if (millis()-time>TIMEOUT) {

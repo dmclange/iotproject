@@ -15,30 +15,41 @@ void setup() {
   blinds.connect();
   //mqtt.connect();
   //mqtt.onMessage(onMqttMessage);
+
+  pinMode(3, INPUT);  // connect to RX
+  pinMode(5, INPUT);  // connect to D1
 }
+
+int profile = 0;
 
 void loop() {
 
-  //mqtt.poll();
+  if ((!digitalRead(3) || !digitalRead(5))) {
+    profile = 4;
+  }
 
-  int profile = 3;
-
-  switch(profile) {
-  case 0:
-    automatic();
-    break;
-  case 1:
-    lights_on_blinds_closed();
-    break;
-  case 2:
-    lights_off_blinds_open();
-    break;
-  case 3:
-    disco();
-    break;
-  default:
-    idle();
-}
+  else {
+    //mqtt.poll();
+  
+    switch(profile) {
+    case 0:
+      automatic();
+      break;
+    case 1:
+      lights_on_blinds_closed();
+      break;
+    case 2:
+      lights_off_blinds_open();
+      break;
+    case 3:
+      disco();
+      break;
+    case 4:
+      all_on();
+    case 5:
+      all_off();
+    }
+  }
 
   delay(100);
 }
@@ -86,10 +97,14 @@ void disco() {
     light.set(2, 101);
 }
 
-void idle() {
-    blinds.close(0);
-    light.set(1, 5);
-    light.set(2, 5);
+void all_on() {
+    light.set(1, 100);
+    light.set(2, 100);
+}
+
+void all_off() {
+    light.set(1, 0);
+    light.set(2, 0);
 }
 
 void onMqttMessage(int messageSize) {
