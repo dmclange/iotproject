@@ -47,3 +47,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + "/static/index.html"));
 });
 
+var ip = require("ip");
+console.dir ( ip.address() );
+
