@@ -58,8 +58,8 @@ def on_message(client, userdata, msg):
     table = kvp[0]
     value = kvp[2]
     decoded = payload.decode('utf8')
-    query = 'UPDATE '+ table +' SET '+ value +' = ' + decoded + ' WHERE id = ' + id + ';'
     # run query
+    query = 'UPDATE '+ table +' SET '+ value +' = ' + decoded + ' WHERE id = ' + id + ';'
     writeDB(query)
 
 def main():
