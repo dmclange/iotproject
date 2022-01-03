@@ -5,7 +5,7 @@
 #include <Wire.h>
 
 #define PIN 9
-#define NUM_LEDS 32
+#define NUM_LEDS 33
 #define BRIGHTNESS 255
 
 #define I2C_ADDRESS 2
@@ -34,7 +34,6 @@ void setup() {
 }
 
 int profile;
-int brightness;
 
 void loop() {
   if (millis()-time>TIMEOUT) {
@@ -44,9 +43,6 @@ void loop() {
   switch(profile) {
   case 1:
     colors();
-    break;
-  case 2:
-    set_light(brightness);
     break;
   }
 }
@@ -63,8 +59,8 @@ void control_leds(int howMany) {
     profile = 1;
   }
   else
-    profile = 2;
-    brightness = (value/100)*255;
+    value = (value/100.0)*255;
+    set_light(value);
 }
 
 //SET LIGHT
@@ -96,6 +92,6 @@ void colors() {
 
     }
     FastLED.show();
-    delay(50);
+    delay(25);
   }
 }

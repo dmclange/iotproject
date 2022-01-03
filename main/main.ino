@@ -6,7 +6,7 @@
 Sensor sensor;
 Light light;
 Blinds blinds;
-MQTT mqtt;
+//MQTT mqtt;
 
 void setup() {
   Serial.begin(9600);
@@ -16,42 +16,36 @@ void setup() {
   //mqtt.connect();
   //mqtt.onMessage(onMqttMessage);
 
-  pinMode(3, INPUT);  // connect to RX
-  pinMode(5, INPUT);  // connect to D1
+  //pinMode(3, INPUT);  // connect to RX
+  //pinMode(5, INPUT);  // connect to D1
 }
 
-int profile = 0;
+int profile = 3;
 
 void loop() {
 
-  if ((!digitalRead(3) || !digitalRead(5))) {
-    profile = 4;
+  //mqtt.poll();
+
+  switch(profile) {
+  case 0:
+    automatic();
+    break;
+  case 1:
+    lights_on_blinds_closed();
+    break;
+  case 2:
+    lights_off_blinds_open();
+    break;
+  case 3:
+    disco();
+    break;
+  case 4:
+    all_on();
+  case 5:
+    all_off();
   }
 
-  else {
-    //mqtt.poll();
-  
-    switch(profile) {
-    case 0:
-      automatic();
-      break;
-    case 1:
-      lights_on_blinds_closed();
-      break;
-    case 2:
-      lights_off_blinds_open();
-      break;
-    case 3:
-      disco();
-      break;
-    case 4:
-      all_on();
-    case 5:
-      all_off();
-    }
-  }
-
-  delay(100);
+  delay(1000);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,12 +61,12 @@ void automatic() {
     light.set(1, 100);
     light.set(2, 100);
   }
-  else if (value < 200) {
+  else if (value < 150) {
     blinds.close(50);
     light.set(1, 10);
     light.set(2, 10);
   }
-  else if (value > 200) {
+  else if (value > 150) {
     blinds.close(0);
     light.set(1, 0);
     light.set(2, 0);
@@ -107,7 +101,7 @@ void all_off() {
     light.set(2, 0);
 }
 
-void onMqttMessage(int messageSize) {
+/*void onMqttMessage(int messageSize) {
   Serial.println("Received a message with topic '");
   Serial.print(mqtt.messageTopic());
   Serial.print("', length ");
@@ -120,4 +114,4 @@ void onMqttMessage(int messageSize) {
   
   Serial.println();
   Serial.println();
-}
+}*/

@@ -14,8 +14,8 @@ class MQTT: public MqttClient {
       const char topic1[] = "building/floorone";
       const char topic2[] = "building/floortwo";
       
-      WiFi.begin("SSID", "PASSWORD");
-
+      WiFi.begin("mcdonalds-wifi", "noitisnt");
+      
       Serial.println();
       Serial.println("Connecting...");
     
@@ -28,24 +28,27 @@ class MQTT: public MqttClient {
     
       Serial.print("Attempting to connect to the MQTT broker: ");
       Serial.println(broker);
-    
+
+      setConnectionTimeout(20000);
+      
       if (!MqttClient::connect(broker, port)) {
         Serial.print("MQTT connection failed! Error code = ");
         Serial.println(connectError());
-        return;
+        yield();
       }
-    
-      Serial.println("You're connected to the MQTT broker!");
-    
-      Serial.print("Subscribing to topic: ");
-      Serial.println();
-    
-      subscribe(topic1);
-      subscribe(topic2);
-    
-      Serial.print("Topic: ");
-      Serial.println(topic1);
-      Serial.print("Topic: ");
-      Serial.println(topic2); 
+      else {
+        Serial.println("You're connected to the MQTT broker!");
+      
+        Serial.print("Subscribing to topic: ");
+        Serial.println();
+      
+        subscribe(topic1);
+        subscribe(topic2);
+      
+        Serial.print("Topic: ");
+        Serial.println(topic1);
+        Serial.print("Topic: ");
+        Serial.println(topic2); 
+      }
     }
 };
